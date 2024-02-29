@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { createUser, updateUser } from '../redux/thunk/userThunk'
+import { createUser, updateUser } from '../redux/toolkits/userSlice'
 
 const UserInput = ({ editUser, setEditUser }) => {
   const [name, setName] = useState('')
