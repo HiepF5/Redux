@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Card from './components/Card'
 import Spinner from './components/Spinner'
 import UserInput from './components/UserInput'
-import { getUsers } from './redux/thunk/userThunk'
 function App() {
   const [editUser, setEditUser] = useState()
 
@@ -13,7 +12,7 @@ function App() {
 
   useEffect(() => {
     // getUsers(dispatch)
-    dispatch(getUsers('123'))
+    dispatch({ type: 'users/fetch_request' })
   }, [dispatch])
 
   return (
