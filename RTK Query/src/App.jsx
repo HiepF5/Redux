@@ -5,15 +5,23 @@ import UserInput from './components/UserInput'
 import userQuery from './redux/rtk-query/userQuery'
 function App() {
   const [editUser, setEditUser] = useState()
+  const id = undefined
   const {
     data: users,
     isLoading,
     error
   } = userQuery.useGetUsersQuery(
-    undefined
+    undefined,
     // { pollingInterval: 3000 }
-    // { skip: true }
+    // { skip: !id }
+    // { refetchOnFocus: false }
+    {
+      selectFromResult: (result) => {
+        return { ...result, data: result.data ?? [] }
+      }
+    }
   )
+  console.log(users)
 
   return (
     <div className='wrap'>

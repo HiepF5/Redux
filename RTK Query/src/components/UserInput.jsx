@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { createUser, updateUser } from '../redux/toolkits/userSlice'
-
+import userQuery, { userSelector } from '../redux/rtk-query/userQuery'
+import { useSelector } from 'react-redux'
 const UserInput = ({ editUser, setEditUser }) => {
   const [name, setName] = useState('')
   const [avatar, setAvatar] = useState('')
-
-  const dispatch = useDispatch()
-
+  const [createUser, { isLoading: createLoading }] = userQuery.useCreateUsersMutation()
+  const [updateUser, { isLoading: updateLoading }] = userQuery.useUpdateUsersMutation()
+  // const userSelector = userQuery.endpoints.getUsers.select()
+  const users = useSelector((state) => userSelector(state))
+  console.log(users)
   useEffect(() => {
     if (editUser) {
       setName(editUser.name)
@@ -20,9 +21,11 @@ const UserInput = ({ editUser, setEditUser }) => {
     const createdAt = new Date().toISOString()
 
     if (editUser) {
-      dispatch(updateUser({ ...editUser, name, avatar }))
+      // dispatch(updateUser({ ...editUser, name, avatar }))
+      updateUser({ ...editUser, name, avatar })
     } else {
-      dispatch(createUser({ name, avatar, createdAt }))
+      // dispatch(createUser({ name, avatar, createdAt }))
+      createUser({ name, avatar, createdAt })
     }
 
     setEditUser(undefined)
@@ -42,7 +45,9 @@ const UserInput = ({ editUser, setEditUser }) => {
         <input type='text' required value={avatar} onChange={(e) => setAvatar(e.target.value)} />
       </div>
 
-      <button type='submit'>{editUser ? 'Update' : 'Add'}</button>
+      <button type='submit' disabled={createLoading || updateLoading}>
+        {editUser ? 'Update' : 'Add'}
+      </button>
     </form>
   )
 }

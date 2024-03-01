@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './toolkits/userSlice'
 import userQuery from './rtk-query/userQuery'
+import { setupListeners } from '@reduxjs/toolkit/query'
 export const store = configureStore({
   reducer: {
     userState: userSlice,
@@ -8,6 +9,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userQuery.middleware)
 })
+setupListeners(store.dispatch)
 // import { createStore, applyMiddleware } from 'redux'
 // import { composeWithDevTools } from 'redux-devtools-extension'
 
