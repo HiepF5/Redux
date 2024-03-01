@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import Card from './components/Card'
 import Spinner from './components/Spinner'
 import UserInput from './components/UserInput'
-import { getUsers } from './redux/toolkits/userSlice'
+import userQuery from './redux/rtk-query/userQuery'
 function App() {
   const [editUser, setEditUser] = useState()
-
-  const { data: users, loading, error } = useSelector((state) => state.userState)
-
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    // getUsers(dispatch)
-    dispatch(getUsers('123'))
-  }, [dispatch])
+  const {
+    data: users,
+    isLoading,
+    error
+  } = userQuery.useGetUsersQuery(
+    undefined
+    // { pollingInterval: 3000 }
+    // { skip: true }
+  )
 
   return (
     <div className='wrap'>
       <UserInput editUser={editUser} setEditUser={setEditUser} />
 
-      {error && <span>{error.message}</span>}
+      {error && <span>{JSON.stringify(error)}</span>}
 
       <div className='card_container'>
-        {users.map((user) => (
+        {users?.map((user) => (
           <React.Fragment key={user.id}>
             <Card user={user} setEditUser={setEditUser} />
           </React.Fragment>
         ))}
       </div>
 
-      {loading && <Spinner />}
+      {isLoading && <Spinner />}
     </div>
   )
 }

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './toolkits/userSlice'
-
+import userQuery from './rtk-query/userQuery'
 export const store = configureStore({
   reducer: {
-    userState: userSlice
-  }
+    userState: userSlice,
+    [userQuery.reducerPath]: userQuery.reducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userQuery.middleware)
 })
 // import { createStore, applyMiddleware } from 'redux'
 // import { composeWithDevTools } from 'redux-devtools-extension'
